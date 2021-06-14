@@ -1,0 +1,73 @@
+{
+  "name": "fabric-rest-api",
+  "description": "fabric and feather restful api",
+  "version": "0.0.0",
+  "homepage": "",
+  "private": true,
+  "main": "src",
+  "keywords": [
+    "feathers"
+  ],
+  "author": {
+    "name": "s991045",
+    "email": "s991045@gmail.com"
+  },
+  "contributors": [],
+  "bugs": {},
+  "directories": {
+    "lib": "src",
+    "test": "test/",
+    "config": "config/"
+  },
+  "engines": {
+    "node": "^12.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "scripts": {
+    "test": "npm run lint && npm run mocha",
+    "lint": "eslint src/. test/. --config .eslintrc.json --fix",
+    "dev": "nodemon src/",
+    "start": "node src/",
+    "mocha": "mocha test/ --recursive --exit"
+  },
+  "standard": {
+    "env": [
+      "mocha"
+    ],
+    "ignore": []
+  },
+  "dependencies": {
+    "@feathersjs/authentication": "^4.5.11",
+    "@feathersjs/authentication-local": "^4.5.11",
+    "@feathersjs/authentication-oauth": "^4.5.11",
+    "@feathersjs/configuration": "^4.5.11",
+    "@feathersjs/errors": "^4.5.11",
+    "@feathersjs/express": "^4.5.11",
+    "@feathersjs/feathers": "^4.5.11",
+    "@feathersjs/socketio": "^4.5.11",
+    "@feathersjs/transport-commons": "^4.5.11",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.0.0",
+    "dotenv": "^10.0.0",
+    "fabric-ca-client": "^2.2.4",
+    "fabric-network": "^2.2.4",
+    "feathers-mongodb": "^6.3.0",
+    "feathers-mongoose": "^8.3.3",
+    "helmet": "^4.6.0",
+    "jose": "^3.12.3",
+    "mongodb": "^3.6.9",
+    "mongodb-core": "^3.2.7",
+    "mongoose": "^5.12.13",
+    "node-jose": "^2.0.0",
+    "serve-favicon": "^2.5.0",
+    "shamirs-secret-sharing": "^1.0.1",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "axios": "^0.21.1",
+    "eslint": "^7.28.0",
+    "mocha": "^8.4.0",
+    "nodemon": "^2.0.7"
+  }
+}
