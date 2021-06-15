@@ -11,16 +11,10 @@ async function enrollUser(userName, userPwd, userOrg) {
         const connectionFile = `connection-${userOrg}.json`;
         let caName = `ca.${orgDomain}`;
 
-        console.log(`orgDomain: ${orgDomain}`);
-        console.log(`connectionFile: ${connectionFile}`);
-
-
         // load the network configuration
         // const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
         // let ccpPath = path.join(__dirname, '../../../../trust-id/fabric-samples/test-network/organizations/peerOrganizations', orgDomain, connectionFile);
         const ccpPath = '/opt/gopath/src/trust-id/fabric-samples/test-network/organizations/peerOrganizations/'+ orgDomain +'/' + connectionFile;     
-           
-        console.log('ccpPath : ', ccpPath)
         const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
         // Create a new CA client for interacting with the CA.
@@ -38,11 +32,9 @@ async function enrollUser(userName, userPwd, userOrg) {
         const walletPath = path.join(__dirname, `./identity/wallet`);
         // const walletPath = '/opt/gopath/src/github.com/fabric-rest-api/src/blockchain/identity/wallet';
         const wallet = await Wallets.newFileSystemWallet(walletPath);
-        console.log(`Wallet path: ${walletPath}`);
-
+    
         // Check to see if we've already enrolled the admin user.
         const identity = await wallet.get(userName);
-        console.log('identity : ', identity)
         if (identity) {
             console.log(`An identity for the admin user ${userName} already exists in the wallet`);
             response = { success: false, message: `An identity for the client user ${userName} already exists in the wallet` };
@@ -64,7 +56,6 @@ async function enrollUser(userName, userPwd, userOrg) {
         // Register the user, enroll the user, and import the new identity into the wallet.
         const secret = await ca.register({
             affiliation: 'org1.department1',
-            // affiliation: '',
             enrollmentID: userName,
             role: 'client'
         }, adminUser);
@@ -74,8 +65,6 @@ async function enrollUser(userName, userPwd, userOrg) {
         //userPwd
         // const enrollment = await ca.enroll({ enrollmentID: userName, enrollmentSecret: secret });
         const enrollment = await ca.enroll({ enrollmentID: userName, enrollmentSecret: secret });
-
-        console.log('enrollment : ', enrollment)
 
         const x509Identity = {
             credentials: {

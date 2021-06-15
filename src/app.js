@@ -25,12 +25,42 @@ const mongoose = require('./mongoose');
 
 const hfConnect = require('./hfConnect');
 
-const mongodb = require('./mongodb');
-
 const app = express(feathers());
+
+const swagger = require('feathers-swagger');
+const sequelizeToJsonSchemas = require('./sequelize-to-json-schemas');
 
 // Load app configuration
 app.configure(configuration());
+
+// Set up for feathers-swagger
+// https://github.com/feathersjs-ecosystem/feathers-swagger#example-with-ui
+app.configure(swagger({
+  openApiVersion: 3,
+  docsPath: '/docs',
+  uiIndex: path.join(__dirname, '../public/docs/swagger-ui.html'),
+  specs: {
+    info: {
+      title: 'fabric-rest-api service - API docs',
+      description: 'An API test built with Node.js, FeathersJS and more,' +
+                   ' for The s991045@gmail.com.',
+      version: '1.0.0'
+    },
+    components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: 'http',
+          scheme: 'bearer'
+        }
+      }
+    },
+    security: [{
+      BearerAuth: []
+    }]
+  }
+}));
+
+
 // Enable security, CORS, compression, favicon and body parsing
 const whitelist = [app.get('client_url')] || [process.env.client_url] ;
 console.log('whitelist : ', whitelist);
@@ -62,13 +92,19 @@ app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 // Host the public folder
 app.use('/', express.static(app.get('public')));
 
+// Expose the `node_modules` to the public directory
+app.use(
+  '/third-party-code',
+  express.static(path.join(__dirname, '/../node_modules'))
+);
+
 // Set up Plugins and providers
 app.configure(express.rest());
 app.configure(socketio());
 
 app.configure(mongoose);
 
-app.configure(mongodb);
+app.configure(sequelizeToJsonSchemas);
 
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);

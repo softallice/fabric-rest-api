@@ -10,4 +10,9 @@ module.exports = app => {
 
   app.use('/authentication', authentication);
   app.configure(expressOauth());
+
+  app.on('login', (data) => {
+    data.user['lastLoggedIn'] = new Date();
+    app.service('users').patch(data.user._id, data.user);
+  });
 };

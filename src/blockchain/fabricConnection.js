@@ -1,16 +1,12 @@
 'use strict';
-
+// hyperledger fabric network connection
 const { Gateway, Wallets } = require('fabric-network');
 const path = require('path');
 const fs = require('fs');
 
 async function connect( user, channel, chaincode, userOrg ) {
     try {
-        // console.log('user : ', user);
-        // console.log('channel :', channel);
-        // console.log('chaincode :', chaincode);
-        // console.log('userOrg :', userOrg);
-        // Connect Org profile
+        
         const orgDomain = `${userOrg}.example.com`;
         const connectionFile = `connection-${userOrg}.json`;
         
@@ -35,7 +31,7 @@ async function connect( user, channel, chaincode, userOrg ) {
 
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
-        await gateway.connect(ccp, { wallet, identity: user, discovery: { enabled: true, asLocalhost: true } });
+        await gateway.connect(ccp, { wallet, identity: user.toLowerCase(), discovery: { enabled: true, asLocalhost: true } });
 
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork(channel);
@@ -43,7 +39,7 @@ async function connect( user, channel, chaincode, userOrg ) {
         // Get the contract from the network.
         const contract = network.getContract(chaincode);
 
-        return contract;
+        return { contract, gateway };
 
     } catch (error) {
         console.error(`Failed to evaluate transaction: ${error}`);
